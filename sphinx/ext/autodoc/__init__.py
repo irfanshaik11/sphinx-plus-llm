@@ -1288,10 +1288,11 @@ class FunctionDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # typ
     """
     objtype = 'function'
     member_order = 30
-
+    print("Irfan logs: FunctionDocumenter Initted")
     @classmethod
     def can_document_member(cls, member: Any, membername: str, isattr: bool, parent: Any,
                             ) -> bool:
+        print(f"Irfan logs can_document_member: membername: {membername}, isattr: {isattr}")
         # supports functions, builtins and bound methods exported at the module level
         return (inspect.isfunction(member) or inspect.isbuiltin(member) or
                 (inspect.isroutine(member) and isinstance(parent, ModuleDocumenter)))
@@ -1322,6 +1323,7 @@ class FunctionDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # typ
         pass
 
     def add_directive_header(self, sig: str) -> None:
+        print(f"Irfan logs add_directive_header: sig: {sig}")
         sourcename = self.get_sourcename()
         super().add_directive_header(sig)
 
@@ -1370,6 +1372,7 @@ class FunctionDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # typ
         return "\n".join(sigs)
 
     def merge_default_value(self, actual: Signature, overload: Signature) -> Signature:
+        print(f"Irfan logs merge_default_value: actual: {actual} overload: {overload}")
         """Merge default values of actual implementation to the overload variants."""
         parameters = list(overload.parameters.values())
         for i, param in enumerate(parameters):
@@ -1380,6 +1383,7 @@ class FunctionDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # typ
         return overload.replace(parameters=parameters)
 
     def annotate_to_first_argument(self, func: Callable, typ: type) -> Callable | None:
+        print(f"Irfan logs merge_default_value: func: {func} typ: {typ}")
         """Annotate type hint to the first argument of function if needed."""
         try:
             sig = inspect.signature(func, type_aliases=self.config.autodoc_type_aliases)

@@ -20,6 +20,18 @@ from sphinx.transforms.post_transforms import SphinxPostTransform
 from sphinx.util import logging
 from sphinx.util.display import status_iterator
 from sphinx.util.nodes import make_refnode
+import openai
+openai.api_key = "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"
+
+def get_openai_response(msg):
+    # msg = [{'role': 'system', 'content': 'You are the equinox assistant, an ai enabled receptionist. Your job is to help customers with inquiries.' }, {'sender': 'assistant', 'content': 'Hi! This is the Equinox team following up on your call. Could you give us a quick overview of why you were calling?', 'timestamp': 'Aug 10 14:23', 'role': 'assistant'}, {'sender': 'Irfan Shaik', 'content': '', 'timestamp': 'Aug 10 14:23', 'role': 'user'}]
+    msg = msg[:4096]
+    system_prompt = {'role': 'system', 'content': 'You are an AI code summarizer. In response to a user query, give a description of the code provided in text.' }
+    chatgpt_input = [system_prompt, {'role': 'user', 'content': msg}]
+
+    chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=chatgpt_input)
+    return chat_completion.choices[0].message.content
+
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Iterable
@@ -303,10 +315,20 @@ def collect_pages(app: Sphinx) -> Generator[tuple[str, dict[str, Any], str], Non
                         'title': _('Module code')})
         parents.reverse()
         # putting it all together
+        # chatgpt_summary = ''
+        # if modname == 'boto3.docs.action':
+        joined_lines = '\n'.join(lines)
+        print(f"Entelligence-logs: modname is {modname}")
+        chatgpt_summary = get_openai_response(joined_lines)
+        print(f"Entelligence-logs: get_openai_response input is {joined_lines}")
+        print(f"Entelligence-logs: chatgpt_summary is {chatgpt_summary}")
+
         context = {
             'parents': parents,
             'title': modname,
             'body': (_('<h1>Source code for %s</h1>') % modname +
+                    f"AI description of the code is:" +
+                    chatgpt_summary +
                      '\n'.join(lines)),
         }
         yield (pagename, context, 'page.html')

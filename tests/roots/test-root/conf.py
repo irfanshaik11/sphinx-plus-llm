@@ -6,7 +6,7 @@ from docutils.parsers.rst import Directive
 
 from sphinx import addnodes
 
-sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath(''))
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',

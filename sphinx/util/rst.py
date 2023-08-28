@@ -35,7 +35,7 @@ WIDECHARS["ja"] = "WFA"  # In Japanese, Ambiguous characters also have double wi
 
 def escape(text: str) -> str:
     text = symbols_re.sub(r'\\\1', text)
-    text = re.sub(r'^\.', r'\.', text)  # escape a dot at top
+    text = re.sub(r'^\.', r'', text)  # escape a dot at top
     return text
 
 
