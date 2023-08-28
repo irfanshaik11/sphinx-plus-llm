@@ -327,7 +327,7 @@ def collect_pages(app: Sphinx) -> Generator[tuple[str, dict[str, Any], str], Non
             'parents': parents,
             'title': modname,
             'body': (_('<h1>Source code for %s</h1>') % modname +
-                    f"AI description of the code is:\n" +
+                    f"Entelligence AI description of the code is:\n" +
                     chatgpt_summary +
                      '\n'.join(lines)),
         }
